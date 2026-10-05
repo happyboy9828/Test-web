@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F1F4F8;
+  --foreground: #0F172A;
+
+  /* Every tool stylesheet reads these, so all seven tools share one container
+     width, one font and one monospace face instead of hard-coding their own. */
+  --tool-width: 1120px;
+  --tool-font: var(--font-geist-sans);
+  --tool-mono: var(--font-geist-mono);
+
+  /* Shared surface tokens. Tools only map their own prefixed variables onto
+     these, which is what keeps the routes looking like one app. */
+  --tool-surface: #FFFFFF;
+  --tool-surface-2: #F8FAFC;
+  --tool-border: #E2E8F0;
+  --tool-text: #0F172A;
+  --tool-muted: #52606D;
+  --tool-accent: #1D4ED8;
+  --tool-accent-hover: #1E40AF;
+  --tool-accent-text: #1D4ED8;
+  --tool-on-accent: #FFFFFF;
+  --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
+
+  /* Shared page rhythm: padding, grid gap, card padding, radii, type scale. */
+  --tool-pad-top: 40px;
+  --tool-pad-x: 24px;
+  --tool-pad-bottom: 64px;
+  --tool-gap: 24px;
+  --tool-col-gap: 18px;
+  --tool-card-pad: 20px;
+  --tool-radius: 12px;
+  --tool-radius-sm: 8px;
+  --tool-h1: 32px;
+  --tool-h2: 16px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --container-tool: var(--tool-width);
+}
+
+/* System default: follow the OS preference when no explicit choice is set. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0F172A;
+    --foreground: #EEF2F6;
+    --tool-surface: #1E293B;
+    --tool-surface-2: #1E293B;
+    --tool-border: #334155;
+    --tool-text: #EEF2F6;
+    --tool-muted: #94A3B8;
+    --tool-accent: #3B82F6;
+    --tool-accent-hover: #60A5FA;
+    --tool-accent-text: #3B82F6;
+    --tool-on-accent: #0F172A;
+  }
+}
+
+/* Explicit Light: wins over the media query regardless of OS setting.
+   Cool, low-contrast surfaces keep the UI readable while the deeper navy
+   text and blue accent give it a professional, trustworthy weight. */
+:root[data-theme="light"] {
+  --background: #F1F4F8;
+  --foreground: #0F172A;
+  --tool-surface: #FFFFFF;
+  --tool-surface-2: #F8FAFC;
+  --tool-border: #E2E8F0;
+  --tool-text: #0F172A;
+  --tool-muted: #52606D;
+  --tool-accent: #1D4ED8;
+  --tool-accent-hover: #1E40AF;
+  --tool-accent-text: #1D4ED8;
+  --tool-on-accent: #FFFFFF;
+  --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
+  --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
+  --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
+}
+
+/* Explicit Dark: wins over the media query regardless of OS setting. */
+:root[data-theme="dark"] {
+  --background: #0F172A;
+  --foreground: #EEF2F6;
+  --tool-surface: #1E293B;
+  --tool-surface-2: #1E293B;
+  --tool-border: #334155;
+  --tool-text: #EEF2F6;
+  --tool-muted: #94A3B8;
+  --tool-accent: #3B82F6;
+  --tool-accent-hover: #60A5FA;
+  --tool-accent-text: #3B82F6;
+  --tool-on-accent: #0F172A;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--tool-font), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ---------- footer ---------- */
+/* A grounded, low-key footer that anchors the page without competing with the
+   tool content. It shares the shell width so it lines up with the navbar, and
+   its surface is one step darker than the page so it reads as a boundary. */
+.tool-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--tool-border);
+  background: var(--tool-surface-2);
+  color: var(--tool-muted);
+}
+.tool-footer-inner {
+  width: 100%;
+  max-width: var(--tool-width);
+  margin: 0 auto;
+  padding: 28px var(--tool-pad-x) 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+.tool-footer-brand { display: flex; flex-direction: column; gap: 4px; }
+.tool-footer-logo {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--tool-text);
+  text-decoration: none;
+}
+.tool-footer-logo:hover { color: var(--tool-accent-text); }
+.tool-footer-tag { margin: 0; font-size: 13px; max-width: 36ch; }
+.tool-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+.tool-footer-link {
+  font-size: 13px;
+  color: var(--tool-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.tool-footer-link:hover { color: var(--tool-accent-text); }
+.tool-footer-meta {
+  width: 100%;
+  max-width: var(--tool-width);
+  margin: 0 auto;
+  padding: 12px var(--tool-pad-x) 22px;
+  border-top: 1px solid var(--tool-border);
+  font-size: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.tool-footer-sep { opacity: 0.5; }
+
+@media (max-width: 640px) {
+  .tool-footer-inner { padding: 22px 16px 16px; }
+  .tool-footer-meta { padding: 10px 16px 18px; }
+}
+
+html {
+  scroll-padding-top: 4rem;
+}
