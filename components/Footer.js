@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import { getPages } from "../lib/pages";
 
 // A compact, trustworthy footer: brand, a short trust line, tool links and a
 // status note. It stays inside the shared shell width so it lines up with the
@@ -7,6 +8,9 @@ import Logo from "./Logo";
 // anchor the page and signal that the site is maintained.
 export default function Footer() {
   const year = new Date().getFullYear();
+  // Reuse the same page discovery as the home page and the navbar so the
+  // footer's tool list can never drift out of sync with the routes.
+  const pages = getPages();
 
   return (
     <footer className="tool-footer" role="contentinfo">
@@ -24,30 +28,11 @@ export default function Footer() {
           <Link href="/" className="tool-footer-link">
             Home
           </Link>
-          <Link href="/ImageResizer" className="tool-footer-link">
-            Resize
-          </Link>
-          <Link href="/ImgCompresser" className="tool-footer-link">
-            Compress
-          </Link>
-          <Link href="/BGRemove" className="tool-footer-link">
-            Remove BG
-          </Link>
-          <Link href="/WebpToPng" className="tool-footer-link">
-            WebP to PNG
-          </Link>
-          <Link href="/PngToJpg" className="tool-footer-link">
-            PNG to JPG
-          </Link>
-          <Link href="/JpgToPng" className="tool-footer-link">
-            JPG to PNG
-          </Link>
-          <Link href="/ImgToBase64" className="tool-footer-link">
-            Image to Base64
-          </Link>
-          <Link href="/FavIcon" className="tool-footer-link">
-            Favicon
-          </Link>
+          {pages.map((page) => (
+            <Link key={page.href} href={page.href} className="tool-footer-link">
+              {page.title}
+            </Link>
+          ))}
         </nav>
       </div>
 

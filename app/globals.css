@@ -36,6 +36,23 @@
   --tool-radius-sm: 8px;
   --tool-h1: 32px;
   --tool-h2: 16px;
+
+  /* Navbar aliases. components/Navbar/Navbar.css reads these so the navbar
+     tracks the active theme instead of carrying its own hard-coded palette.
+     Each one maps onto a shared token, never a literal colour. */
+  --nav-bg: color-mix(in srgb, var(--background) 92%, transparent);
+  --nav-text: var(--foreground);
+  --nav-border: var(--tool-border);
+  --nav-hover: var(--tool-tint);
+  --nav-limit-bg: color-mix(in srgb, #ef4444 14%, transparent);
+  --nav-limit-text: #b91c1c;
+   --overlay-bg: color-mix(in srgb, var(--foreground) 55%, transparent);
+  --font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Pro button gradient — warm gold conveys a premium tier without
+     clashing with any of the three themes. */
+  --pro-gradient-start: #fbbf24;
+  --pro-gradient-end: #f59e0b;
 }
 
 @theme inline {
@@ -60,6 +77,14 @@
     --tool-accent-hover: #60A5FA;
     --tool-accent-text: #3B82F6;
     --tool-on-accent: #0F172A;
+
+    --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
+    --nav-text: var(--foreground);
+    --nav-border: var(--tool-border);
+    --nav-hover: var(--tool-tint);
+    --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
+    --nav-limit-text: #fca5a5;
+    --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
   }
 }
 
@@ -96,6 +121,40 @@
   --tool-accent-hover: #60A5FA;
   --tool-accent-text: #3B82F6;
   --tool-on-accent: #0F172A;
+
+  --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
+  --nav-text: var(--foreground);
+  --nav-border: var(--tool-border);
+  --nav-hover: var(--tool-tint);
+  --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
+  --nav-limit-text: #fca5a5;
+  --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+
+/* Neon: high-contrast dark with electric accent for a distinct look. */
+:root[data-theme="neon"] {
+  --background: #0A0E17;
+  --foreground: #E2E8F0;
+  --tool-surface: #111827;
+  --tool-surface-2: #0F172A;
+  --tool-border: #1E293B;
+  --tool-text: #E2E8F0;
+  --tool-muted: #94A3B8;
+  --tool-accent: #22D3EE;
+  --tool-accent-hover: #67E8F9;
+  --tool-accent-text: #22D3EE;
+  --tool-on-accent: #0A0E17;
+  --tool-tint: color-mix(in srgb, var(--foreground) 8%, transparent);
+  --tool-tint-strong: color-mix(in srgb, var(--foreground) 16%, transparent);
+  --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 25%, transparent);
+
+  --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
+  --nav-text: var(--foreground);
+  --nav-border: var(--tool-border);
+  --nav-hover: var(--tool-tint);
+  --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
+  --nav-limit-text: #fca5a5;
+  --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
 }
 
 body {

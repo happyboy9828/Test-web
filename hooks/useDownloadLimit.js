@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 
 const LS_KEY = "daily_downloads";
 const LS_DATE_KEY = "daily_downloads_date";
-const DAILY_LIMIT = Infinity;
+const DAILY_LIMIT = 10;
 const EVENT_NAME = "daily-downloads-changed";
 
 function getToday() {
@@ -43,8 +43,8 @@ function consumeDownload() {
 }
 
 export function useDownloadLimit() {
-  const [remaining, setRemaining] = useState(() => Math.max(0, DAILY_LIMIT - getStoredState().count));
-  const [date, setDate] = useState(() => getStoredState().date);
+  const [remaining, setRemaining] = useState(DAILY_LIMIT);
+  const [date, setDate] = useState(null);
 
   const refresh = useCallback(() => {
     const state = getStoredState();
@@ -53,6 +53,8 @@ export function useDownloadLimit() {
   }, []);
 
   useEffect(() => {
+    refresh();
+
     function onStorage(e) {
       if (e.key === LS_KEY || e.key === LS_DATE_KEY) {
         refresh();

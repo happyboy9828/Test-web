@@ -1,13 +1,67 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDownloadLimit } from './../../hooks/useDownloadLimit';
 import './Navbar.css';
 
 export default function Navbar() {
   // State to track which dropdown is open (null if none, or 1-5 for the button index)
   const [activeDropdown, setActiveDropdown] = useState(null);
-   
+
   // State for mobile menu toggle
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // State for transient toast messages (replaces alert() calls so the UI
+  // never drops into the browser's native dialog).
+  const [toast, setToast] = useState('');
+
+  // Theme selector — custom dropdown with per-theme icons and persistence.
+  const getInitialTheme = () => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme') || 'light';
+    }
+    return 'light';
+  };
+
+  const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(getInitialTheme);
+  const themeDropdownRef = useRef(null);
+
+  const themeOptions = [
+    { value: 'light', label: 'Light', icon: '\u2600\ufe0F' },
+    { value: 'dark', label: 'Dark', icon: '\uD83C\uDF19' },
+    { value: 'neon', label: 'Neon', icon: '\u26A1' },
+  ];
+
+  // Sync the data-theme attribute on the root element whenever the chosen
+  // theme changes. Runs on mount (idempotent) and on every subsequent change.
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', selectedTheme);
+  }, [selectedTheme]);
+
+  // Close the theme dropdown when the user clicks outside of it.
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        themeDropdownOpen &&
+        themeDropdownRef.current &&
+        !themeDropdownRef.current.contains(e.target)
+      ) {
+        setThemeDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [themeDropdownOpen]);
+
+  // Daily download limit, shared across the app via the hook so every
+  // component reads the same count and the same limit.
+  const { remaining, limit, isBlocked } = useDownloadLimit();
+
+  const showToast = (message) => {
+    setToast(message);
+    window.clearTimeout(showToast.timer);
+    showToast.timer = window.setTimeout(() => setToast(''), 3600);
+  };
 
   // Helper to check if a dropdown should be visible (either active on desktop or mobile menu is open)
   const shouldShowDropdown = (index) => {
@@ -19,105 +73,128 @@ export default function Navbar() {
     setActiveDropdown(activeDropdown === index ? null : index);
   };
 
-  // Theme change handler stub
-  const handleThemeChange = (e) => {
-    const selectedTheme = e.target.value;
-    document.documentElement.setAttribute('data-theme', selectedTheme);
+  // Theme change handler — persists the choice on the document root, in
+  // localStorage, and in React state, then closes the dropdown.
+  const handleThemeChange = (theme) => {
+    setSelectedTheme(theme);
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    setThemeDropdownOpen(false);
   };
+
+  const currentTheme = themeOptions.find((t) => t.value === selectedTheme) || themeOptions[0];
+
+  const categories = [
+    {
+      name: 'Image Tools',
+      tools: [
+        { name: 'Background Remover', href: '/BGRemove' },
+        { name: 'Favicon Generator', href: '/FavIcon' },
+        { name: 'Image Resizer', href: '/ImageResizer' },
+        { name: 'Image Compressor', href: '/ImgCompresser' },
+        { name: 'Image to Base64', href: '/ImgToBase64' },
+        { name: 'JPG to PNG', href: '/JpgToPng' },
+        { name: 'PNG to JPG', href: '/PngToJpg' },
+        { name: 'WebP to PNG', href: '/WebpToPng' },
+        { name: 'Watermark', href: '/Watermark' },
+      ],
+    },
+    {
+      name: 'PDF Tools',
+      tools: [],
+    },
+    {
+      name: 'MS Office Tools',
+      tools: [],
+    },
+    {
+      name: 'Dev Tools',
+      tools: [],
+    },
+    {
+      name: 'Text Tools',
+      tools: [],
+    },
+  ];
 
   const navLinks = (
     <>
-      {/* Button 1 */}
-      <li className="nav-dropdown-container">
-        <button className="nav-button" onClick={() => handleDropdownToggle(1)}>
-          Products &#9662;
-        </button>
-        {shouldShowDropdown(1) && (
-          <ul className="dropdown-menu">
-            <li><a href="/item1">Analytics</a></li>
-            <li><a href="/item2">Reporting</a></li>
-            <li><a href="/item3">Automation</a></li>
-          </ul>
-        )}
-      </li>
-
-      {/* Button 2 */}
-      <li className="nav-dropdown-container">
-        <button className="nav-button" onClick={() => handleDropdownToggle(2)}>
-          Solutions &#9662;
-        </button>
-        {shouldShowDropdown(2) && (
-          <ul className="dropdown-menu">
-            <li><a href="/item1">For Startups</a></li>
-            <li><a href="/item2">Enterprise</a></li>
-            <li><a href="/item3">Freelancers</a></li>
-          </ul>
-        )}
-      </li>
-
-      {/* Button 3 */}
-      <li className="nav-dropdown-container">
-        <button className="nav-button" onClick={() => handleDropdownToggle(3)}>
-          Resources &#9662;
-        </button>
-        {shouldShowDropdown(3) && (
-          <ul className="dropdown-menu">
-            <li><a href="/item1">Documentation</a></li>
-            <li><a href="/item2">API Reference</a></li>
-            <li><a href="/item3">Community</a></li>
-          </ul>
-        )}
-      </li>
-
-      {/* Button 4 */}
-      <li className="nav-dropdown-container">
-        <button className="nav-button" onClick={() => handleDropdownToggle(4)}>
-          Company &#9662;
-        </button>
-        {shouldShowDropdown(4) && (
-          <ul className="dropdown-menu">
-            <li><a href="/item1">About Us</a></li>
-            <li><a href="/item2">Careers</a></li>
-            <li><a href="/item3">Contact</a></li>
-          </ul>
-        )}
-      </li>
-
-      {/* Button 5 - Extra nav button */}
-      <li className="nav-dropdown-container">
-        <button className="nav-button" onClick={() => handleDropdownToggle(5)}>
-          Pricing &#9662;
-        </button>
-        {shouldShowDropdown(5) && (
-          <ul className="dropdown-menu">
-            <li><a href="/item1">Basic</a></li>
-            <li><a href="/item2">Pro</a></li>
-            <li><a href="/item3">Enterprise</a></li>
-          </ul>
-        )}
-      </li>
+      {categories.map((category, index) => (
+        <li key={index} className="nav-dropdown-container">
+          <button className="nav-button" onClick={() => handleDropdownToggle(index)}>
+            {category.name} &#9662;
+          </button>
+          {shouldShowDropdown(index) && (
+            <ul className="dropdown-menu">
+              {category.tools.length > 0 ? (
+                category.tools.map((tool, toolIndex) => (
+                  <li key={toolIndex}>
+                    <a href={tool.href}>{tool.name}</a>
+                  </li>
+                ))
+              ) : (
+                <li className="dropdown-under-build">Under Build</li>
+              )}
+            </ul>
+          )}
+        </li>
+      ))}
     </>
   );
 
   const navActions = (
     <>
       {/* Daily Download Limit Indicator */}
-      <div className="download-limit-indicator" title="Downloads remaining today">
-        Limit: <strong>8 / 10</strong>
+      <div
+        className={`download-limit-indicator${isBlocked ? ' is-limit-reached' : ''}`}
+        title={isBlocked ? 'Daily download limit reached' : 'Downloads remaining today'}
+      >
+        Limit: <strong>
+          {isBlocked ? `${limit} / ${limit}` : `${limit - remaining} / ${limit}`}
+        </strong>
       </div>
 
-      {/* Theme Selector (3 Options) */}
-      <div className="theme-selector">
-        <select onChange={handleThemeChange} defaultValue="light" aria-label="Theme Selector">
-          <option value="light">Light Theme</option>
-          <option value="dark">Dark Theme</option>
-          <option value="neon">Neon Theme</option>
-        </select>
+      {/* Theme Selector (3 Options) — custom dropdown with icons */}
+      <div
+        className={`theme-selector${themeDropdownOpen ? ' open' : ''}`}
+        ref={themeDropdownRef}
+      >
+        <button
+          className="theme-selector-btn"
+          onClick={() => setThemeDropdownOpen(!themeDropdownOpen)}
+          aria-haspopup="listbox"
+          aria-expanded={themeDropdownOpen}
+          aria-label="Select theme"
+        >
+          <span className="theme-icon">{currentTheme.icon}</span>
+          <span className="theme-label">{currentTheme.label}</span>
+          <span className="theme-chevron" aria-hidden="true"></span>
+        </button>
+
+        {themeDropdownOpen && (
+          <ul className="theme-dropdown-menu" role="listbox">
+            {themeOptions.map((theme) => (
+              <li key={theme.value}>
+                <button
+                  className={`theme-option${selectedTheme === theme.value ? ' active' : ''}`}
+                  onClick={() => handleThemeChange(theme.value)}
+                >
+                  <span className="theme-option-icon">{theme.icon}</span>
+                  <span>{theme.label}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* Pro Version Button */}
-      <button className="pro-btn" onClick={() => alert('Redirecting to upgrade page...')}>
-        Get Pro
+      <button
+        className="pro-btn"
+        onClick={() => showToast('Upgrade page coming soon.')}
+      >
+        <span className="pro-icon" aria-hidden="true"></span>
+        <span>Get Pro</span>
       </button>
     </>
   );
@@ -127,7 +204,7 @@ export default function Navbar() {
       <nav className="navbar">
         {/* Logo */}
         <div className="navbar-logo">
-          <a href="/">Loge</a>
+          <a href="/">DocFix</a>
         </div>
 
         {/* Desktop Nav Links */}
@@ -165,7 +242,7 @@ export default function Navbar() {
         <aside className="drawer">
           <div className="drawer-header">
             <div className="navbar-logo">
-              <a href="/">Loge</a>
+              <a href="/">DocFix</a>
             </div>
             <button
               className="hamburger"
@@ -187,6 +264,13 @@ export default function Navbar() {
           </div>
         </aside>
       </div>
+
+      {/* Transient toast — replaces the old alert() so feedback stays in-app. */}
+      {toast && (
+        <div className="nav-toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      )}
     </>
   );
 }
