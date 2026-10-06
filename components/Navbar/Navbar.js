@@ -63,9 +63,11 @@ export default function Navbar() {
     showToast.timer = window.setTimeout(() => setToast(''), 3600);
   };
 
-  // Helper to check if a dropdown should be visible (either active on desktop or mobile menu is open)
+  // Helper to check if a dropdown should be visible. Only the tapped
+  // category opens — on mobile the submenu renders inline under its
+  // button (accordion style) instead of forcing every category open.
   const shouldShowDropdown = (index) => {
-    return activeDropdown === index || mobileMenuOpen;
+    return activeDropdown === index;
   };
 
   // Toggle dropdown handler
@@ -79,6 +81,13 @@ export default function Navbar() {
     setSelectedTheme(theme);
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
+    setThemeDropdownOpen(false);
+  };
+
+  // Close the mobile drawer (also resets the theme dropdown so no
+  // stale open state survives into the next drawer open).
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
     setThemeDropdownOpen(false);
   };
 
@@ -235,7 +244,7 @@ export default function Navbar() {
       >
         <div
           className="overlay"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={closeMobileMenu}
           aria-hidden="true"
         />
 
@@ -246,7 +255,7 @@ export default function Navbar() {
             </div>
             <button
               className="hamburger"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
               aria-label="Close menu"
             >
               &#10005;
