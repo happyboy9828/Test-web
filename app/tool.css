@@ -63,6 +63,16 @@
 
 .tool-col { display: flex; flex-direction: column; gap: var(--tool-col-gap); min-width: 0; }
 
+/* Mobile: collapse all tool grids to a single column for readability. */
+@media (max-width: 768px) {
+  .tool-grid,
+  .tool-grid--queue,
+  .tool-grid--stage,
+  .tool-grid--sidebar {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ---------- cards ---------- */
 .tool-card {
   padding: var(--tool-card-pad);
