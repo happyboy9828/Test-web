@@ -13,7 +13,7 @@
 */
 
 const STORAGE_KEY = "docfix_dl_limit";
-const DAILY_LIMIT = 10;
+export const DAILY_LIMIT = 10;
 
 const EVENT = "docfix:downloadLimitChange";
 

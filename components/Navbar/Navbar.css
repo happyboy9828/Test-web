@@ -103,9 +103,9 @@
   gap: 1.5rem;
 }
 
-/* Shift theme selector right from the nav edge */
+/* Shift theme selector to the right edge of the nav-actions */
 .theme-selector {
-  margin-left: 1rem;
+  margin-left: auto;
 }
 
 /* Download Limit Indicator */

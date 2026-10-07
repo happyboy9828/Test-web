@@ -134,6 +134,17 @@ export default function Navbar() {
 
   const navActions = (
     <>
+      <div className="download-limit-wrapper">
+        <span
+          className={`download-limit-indicator${downloadLimit.remaining === 0 ? " is-limit-reached" : ""}`}
+          aria-label={`Downloads remaining: ${downloadLimit.remaining} of ${downloadLimit.limit}`}
+        >
+          {downloadLimit.remaining > 0
+            ? `${downloadLimit.remaining}/${downloadLimit.limit} downloads left`
+            : 'Limit reached'}
+        </span>
+      </div>
+
       <div className={`theme-selector${themeDropdownOpen ? ' open' : ''}`} ref={themeDropdownRef}>
         <button
           className="theme-selector-btn"
@@ -162,17 +173,6 @@ export default function Navbar() {
             ))}
           </ul>
         )}
-      </div>
-
-      <div className="download-limit-wrapper">
-        <span
-          className={`download-limit-indicator${downloadLimit.remaining === 0 ? " is-limit-reached" : ""}`}
-          aria-label={`Downloads remaining: ${downloadLimit.remaining} of ${downloadLimit.limit}`}
-        >
-          {downloadLimit.remaining > 0
-            ? `${downloadLimit.remaining}/${downloadLimit.limit} downloads left`
-            : `Limit reached — resets at ${new Date(downloadLimit.resetsAt).toUTCString()}`}
-        </span>
       </div>
 
       <button
