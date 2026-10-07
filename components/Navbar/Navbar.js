@@ -1,12 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import { useDownloadLimit } from './../../hooks/useDownloadLimit';
+import PricingModal from "../PricingModal";
 import './Navbar.css';
 
 export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toast, setToast] = useState('');
+  const [pricingOpen, setPricingOpen] = useState(false);
 
   // 1. Always start with 'light' for SSR match, then update in useEffect
   const [selectedTheme, setSelectedTheme] = useState('light');
@@ -47,12 +48,6 @@ export default function Navbar() {
 
   const { remaining, limit, isBlocked } = useDownloadLimit();
 
-  const showToast = (message) => {
-    setToast(message);
-    window.clearTimeout(showToast.timer);
-    showToast.timer = window.setTimeout(() => setToast(''), 3600);
-  };
-
   const shouldShowDropdown = (index) => {
     return activeDropdown === index;
   };
@@ -72,6 +67,17 @@ export default function Navbar() {
     setMobileMenuOpen(false);
     setThemeDropdownOpen(false);
     setActiveDropdown(null);
+  };
+
+  // The Get Pro button opens the pricing popup so plans can be
+  // compared without leaving the current page.
+  const openPricing = () => {
+    setPricingOpen(true);
+    closeMobileMenu();
+  };
+
+  const closePricing = () => {
+    setPricingOpen(false);
   };
 
   const currentTheme = themeOptions.find((t) => t.value === selectedTheme) || themeOptions[0];
@@ -164,13 +170,13 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Pro Version Button with Crown Icon */}
+      {/* Pro Version Button with Crown Icon — opens the
+          pricing popup instead of leaving the page */}
       <button
         className="pro-btn"
-        onClick={() => {
-          showToast('Upgrade page coming soon.');
-          closeMobileMenu();
-        }}
+        aria-haspopup="dialog"
+        aria-expanded={pricingOpen}
+        onClick={openPricing}
       >
         <span className="pro-icon" aria-hidden="true">👑</span>
         <span>Get Pro</span>
@@ -229,11 +235,9 @@ export default function Navbar() {
         </aside>
       </div>
 
-      {toast && (
-        <div className="nav-toast" role="status" aria-live="polite">
-          {toast}
-        </div>
-      )}
+      {/* Pricing popup: the Get Pro button opens the full
+          pricing table in a modal instead of navigating away. */}
+      <PricingModal open={pricingOpen} onClose={closePricing} />
     </>
   );
 }
