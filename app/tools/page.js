@@ -1,4 +1,4 @@
-import ContentPage from "./../../components/ContentPage";
+import ContentPage from "./../../components/ContentPage/ContentPage";
 import { getPages } from "./../../lib/pages";
 
 export const metadata = {

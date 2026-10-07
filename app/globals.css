@@ -255,9 +255,16 @@ body {
 }
 .tool-footer-sep { opacity: 0.5; }
 
-/* Accordion / collapsible columns — on narrow screens each section
-   can be expanded or collapsed like a native accordion. On desktop
-   the same markup renders as a plain column. */
+/* Desktop-only static columns. Hidden on narrow screens,
+   where the <details> accordion variant below takes over. */
+.tool-footer-section {
+  display: none;
+}
+
+/* Accordion / collapsible columns — narrow screens only.
+   Each section expands and collapses like a native
+   accordion; on desktop the static .tool-footer-section
+   columns replace them and every list is always visible. */
 .tool-footer-accordion {
   border: 1px solid var(--tool-border);
   border-radius: var(--tool-radius);
@@ -303,39 +310,20 @@ body {
   color: var(--tool-muted);
 }
 
-/* Desktop: render the accordion as a plain column. */
+/* Desktop: replace the accordions with the static
+   columns, which render every list expanded — no
+   toggle, no click required. */
 @media (min-width: 641px) {
   .tool-footer-accordion {
-    border: none;
-    background: transparent;
-    padding: 0;
-    overflow: visible;
-  }
-  .tool-footer-accordion-head {
-    padding: 0;
-    cursor: default;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .tool-footer-accordion-head .tool-footer-heading {
-    margin: 0 0 12px;
-    font-size: 12px;
-  }
-  .tool-footer-chevron {
     display: none;
   }
-  .tool-footer-accordion > .tool-footer-list {
-    padding: 0;
+  .tool-footer-section {
+    display: block;
+  }
+  /* Keep the tighter desktop list rhythm; without this
+     the categories list would keep its roomier spacing. */
+  .tool-footer-section .tool-footer-list {
     gap: 10px;
-  }
-  .tool-footer-accordion > .tool-footer-list .tool-footer-link,
-  .tool-footer-accordion > .tool-footer-list .tool-footer-category-name {
-    font-size: 13px;
-    color: var(--tool-muted);
-  }
-  .tool-footer-accordion > .tool-footer-list .tool-footer-category-name {
-    color: var(--tool-text);
-    font-weight: 600;
   }
 }
 

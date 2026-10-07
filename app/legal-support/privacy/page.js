@@ -1,4 +1,4 @@
-import ContentPage from "../../../../components/ContentPage/ContentPage";
+import ContentPage from "../../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "Privacy Policy",

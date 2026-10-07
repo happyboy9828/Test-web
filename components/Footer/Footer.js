@@ -17,10 +17,43 @@ const LEGAL_LINKS = [
   { href: "/docs", label: "Docs" },
 ];
 
+// Shared list renderers so the static desktop columns and the
+// mobile accordions always show exactly the same items.
+function FooterLinks({ links }) {
+  return (
+    <ul className="tool-footer-list">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link href={link.href} className="tool-footer-link">
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function FooterCategories({ categories }) {
+  return (
+    <ul className="tool-footer-list tool-footer-categories">
+      {categories.map((category) => (
+        <li key={category.name} className="tool-footer-category-name">
+          {category.name}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export default function Footer() {
   const year = new Date().getFullYear();
   const categories = getCategories();
 
+  // Each section renders twice: a static .tool-footer-section
+  // column for desktop (every list always expanded) and a native
+  // <details> accordion for narrow screens (collapsed until
+  // tapped). CSS shows only one variant per viewport, so the
+  // hidden copy never renders visually.
   return (
     <footer className="tool-footer" role="contentinfo">
       <div className="tool-footer-inner">
@@ -33,6 +66,21 @@ export default function Footer() {
           </p>
         </div>
 
+        <section className="tool-footer-section">
+          <h2 className="tool-footer-heading">Navigation</h2>
+          <FooterLinks links={NAV_LINKS} />
+        </section>
+
+        <section className="tool-footer-section">
+          <h2 className="tool-footer-heading">Popular Category</h2>
+          <FooterCategories categories={categories} />
+        </section>
+
+        <section className="tool-footer-section">
+          <h2 className="tool-footer-heading">Legal &amp; Support</h2>
+          <FooterLinks links={LEGAL_LINKS} />
+        </section>
+
         <details className="tool-footer-accordion">
           <summary className="tool-footer-accordion-head">
             <h2 className="tool-footer-heading">Navigation</h2>
@@ -40,15 +88,7 @@ export default function Footer() {
               ▾
             </span>
           </summary>
-          <ul className="tool-footer-list">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="tool-footer-link">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <FooterLinks links={NAV_LINKS} />
         </details>
 
         <details className="tool-footer-accordion">
@@ -58,31 +98,17 @@ export default function Footer() {
               ▾
             </span>
           </summary>
-          <ul className="tool-footer-list tool-footer-categories">
-            {categories.map((category) => (
-              <li key={category.name} className="tool-footer-category-name">
-                {category.name}
-              </li>
-            ))}
-          </ul>
+          <FooterCategories categories={categories} />
         </details>
 
         <details className="tool-footer-accordion">
           <summary className="tool-footer-accordion-head">
-            <h2 className="tool-footer-heading">Legal & Support</h2>
+            <h2 className="tool-footer-heading">Legal &amp; Support</h2>
             <span className="tool-footer-chevron" aria-hidden="true">
               ▾
             </span>
           </summary>
-          <ul className="tool-footer-list">
-            {LEGAL_LINKS.map((link) => (
-              <li key={link.label}>
-                <Link href={link.href} className="tool-footer-link">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <FooterLinks links={LEGAL_LINKS} />
         </details>
       </div>
 

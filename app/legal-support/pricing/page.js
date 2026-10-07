@@ -1,5 +1,5 @@
-import ContentPage from "../../../../components/ContentPage/ContentPage";
-import PricingTable from "../../../../components/PricingTable/PricingTable";
+import ContentPage from "../../../components/ContentPage/ContentPage";
+import PricingTable from "../../../components/PricingTable/PricingTable";
 
 export const metadata = {
   title: "Pricing",

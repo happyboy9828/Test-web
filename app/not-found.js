@@ -4,8 +4,8 @@
 // still have somewhere to go in one click.
 
 import Link from "next/link";
-import PageCard from "../components/PageCard";
-import NotFoundPath from "../components/NotFoundPath";
+import PageCard from "../components/PageCard/PageCard";
+import NotFoundPath from "../components/NotFoundPath/NotFoundPath";
 import { getPages } from "../lib/pages";
 import "./not-found.css";
 
