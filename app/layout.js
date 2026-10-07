@@ -60,7 +60,7 @@ export default function RootLayout({ children }) {
         <Navbar pages={pages} />
 
         <div className="mx-auto w-full max-w-[var(--tool-width)] flex-1 px-6 xl:max-w-[1400px]">
-          <div className="pt-10">
+          <div className="ad-banner-spacer pt-10">
             <AdBanner slot="leaderboard-top" />
           </div>
 
