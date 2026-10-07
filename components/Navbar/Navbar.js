@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
 import PricingModal from "../PricingModal/PricingModal";
+import { useDownloadLimit } from "../../utils/shared/useDownloadLimit";
 import './Navbar.css';
 
 export default function Navbar() {
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [selectedTheme, setSelectedTheme] = useState('light');
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const themeDropdownRef = useRef(null);
+  const downloadLimit = useDownloadLimit();
 
   const themeOptions = [
     { value: 'light', label: 'Light', icon: '☀️' },
@@ -91,7 +93,16 @@ export default function Navbar() {
     },
     { name: 'PDF Tools', tools: [] },
     { name: 'MS Office Tools', tools: [] },
-    { name: 'Dev Tools', tools: [] },
+    {
+      name: 'Dev Tools',
+      tools: [
+        { name: 'CSS Minifier', href: '/dev-tools/CSSMinifier' },
+        { name: 'HTML Minifier', href: '/dev-tools/HTMLMinifier' },
+        { name: 'Password Generator', href: '/dev-tools/PasswordGenerator' },
+        { name: 'QR Code Generator', href: '/dev-tools/QRCodeGenerator' },
+        { name: 'QR Code Scanner', href: '/dev-tools/QRCodeScanner' },
+      ],
+    },
     { name: 'Text Tools', tools: [] },
   ];
 
@@ -151,6 +162,17 @@ export default function Navbar() {
             ))}
           </ul>
         )}
+      </div>
+
+      <div className="download-limit-wrapper">
+        <span
+          className={`download-limit-indicator${downloadLimit.remaining === 0 ? " is-limit-reached" : ""}`}
+          aria-label={`Downloads remaining: ${downloadLimit.remaining} of ${downloadLimit.limit}`}
+        >
+          {downloadLimit.remaining > 0
+            ? `${downloadLimit.remaining}/${downloadLimit.limit} downloads left`
+            : `Limit reached — resets at ${new Date(downloadLimit.resetsAt).toUTCString()}`}
+        </span>
       </div>
 
       <button

@@ -103,6 +103,11 @@
   gap: 1.5rem;
 }
 
+/* Shift theme selector right from the nav edge */
+.theme-selector {
+  margin-left: 1rem;
+}
+
 /* Download Limit Indicator */
 .download-limit-indicator {
   font-size: 0.85rem;

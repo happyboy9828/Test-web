@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F1F4F8;
+  --background: #F1F5F9;
   --foreground: #0F172A;
 
   /* Every tool stylesheet reads these, so all seven tools share one container
@@ -12,14 +12,14 @@
 
   /* Shared surface tokens. Tools only map their own prefixed variables onto
      these, which is what keeps the routes looking like one app. */
-  --tool-surface: #FFFFFF;
-  --tool-surface-2: #F8FAFC;
-  --tool-border: #E2E8F0;
+  --tool-surface: #E2E8F0;
+  --tool-surface-2: #F1F5F9;
+  --tool-border: #CBD5E1;
   --tool-text: #0F172A;
-  --tool-muted: #52606D;
-  --tool-accent: #1D4ED8;
-  --tool-accent-hover: #1E40AF;
-  --tool-accent-text: #1D4ED8;
+  --tool-muted: #475569;
+  --tool-accent: #4F46E5;
+  --tool-accent-hover: #4338CA;
+  --tool-accent-text: #4F46E5;
   --tool-on-accent: #FFFFFF;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
@@ -89,19 +89,19 @@
 }
 
 /* Explicit Light: wins over the media query regardless of OS setting.
-   Cool, low-contrast surfaces keep the UI readable while the deeper navy
-   text and blue accent give it a professional, trustworthy weight. */
+   The Non-White Cool Professional Palette — anti-glare slate surfaces with
+   deep charcoal text and trustworthy indigo accents. */
 :root[data-theme="light"] {
-  --background: #F1F4F8;
+  --background: #F1F5F9;
   --foreground: #0F172A;
-  --tool-surface: #FFFFFF;
-  --tool-surface-2: #F8FAFC;
-  --tool-border: #E2E8F0;
+  --tool-surface: #E2E8F0;
+  --tool-surface-2: #F1F5F9;
+  --tool-border: #CBD5E1;
   --tool-text: #0F172A;
-  --tool-muted: #52606D;
-  --tool-accent: #1D4ED8;
-  --tool-accent-hover: #1E40AF;
-  --tool-accent-text: #1D4ED8;
+  --tool-muted: #475569;
+  --tool-accent: #4F46E5;
+  --tool-accent-hover: #4338CA;
+  --tool-accent-text: #4F46E5;
   --tool-on-accent: #FFFFFF;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
