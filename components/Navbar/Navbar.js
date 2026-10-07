@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
-import { useDownloadLimit } from './../../hooks/useDownloadLimit';
-import PricingModal from "../PricingModal";
+import PricingModal from "../PricingModal/PricingModal";
 import './Navbar.css';
 
 export default function Navbar() {
@@ -9,7 +8,6 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [pricingOpen, setPricingOpen] = useState(false);
 
-  // 1. Always start with 'light' for SSR match, then update in useEffect
   const [selectedTheme, setSelectedTheme] = useState('light');
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const themeDropdownRef = useRef(null);
@@ -20,14 +18,12 @@ export default function Navbar() {
     { value: 'neon', label: 'Neon', icon: '⚡' },
   ];
 
-  // 2. Sync theme from localStorage / document attribute after mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme') || 'light';
     setSelectedTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
 
-  // Sync the data-theme attribute whenever the chosen theme changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', selectedTheme);
   }, [selectedTheme]);
@@ -45,8 +41,6 @@ export default function Navbar() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [themeDropdownOpen]);
-
-  const { remaining, limit, isBlocked } = useDownloadLimit();
 
   const shouldShowDropdown = (index) => {
     return activeDropdown === index;
@@ -69,8 +63,6 @@ export default function Navbar() {
     setActiveDropdown(null);
   };
 
-  // The Get Pro button opens the pricing popup so plans can be
-  // compared without leaving the current page.
   const openPricing = () => {
     setPricingOpen(true);
     closeMobileMenu();
@@ -86,15 +78,15 @@ export default function Navbar() {
     {
       name: 'Image Tools',
       tools: [
-        { name: 'Background Remover', href: '/BGRemove' },
-        { name: 'Favicon Generator', href: '/FavIcon' },
-        { name: 'Image Resizer', href: '/ImageResizer' },
-        { name: 'Image Compressor', href: '/ImgCompresser' },
-        { name: 'Image to Base64', href: '/ImgToBase64' },
-        { name: 'JPG to PNG', href: '/JpgToPng' },
-        { name: 'PNG to JPG', href: '/PngToJpg' },
-        { name: 'WebP to PNG', href: '/WebpToPng' },
-        { name: 'Watermark', href: '/Watermark' },
+        { name: 'Background Remover', href: '/img/BGRemove' },
+        { name: 'Favicon Generator', href: '/img/FavIcon' },
+        { name: 'Image Resizer', href: '/img/ImageResizer' },
+        { name: 'Image Compressor', href: '/img/ImgCompresser' },
+        { name: 'Image to Base64', href: '/img/ImgToBase64' },
+        { name: 'JPG to PNG', href: '/img/JpgToPng' },
+        { name: 'PNG to JPG', href: '/img/PngToJpg' },
+        { name: 'WebP to PNG', href: '/img/WebpToPng' },
+        { name: 'Watermark', href: '/img/Watermark' },
       ],
     },
     { name: 'PDF Tools', tools: [] },
@@ -131,15 +123,6 @@ export default function Navbar() {
 
   const navActions = (
     <>
-      <div
-        className={`download-limit-indicator${isBlocked ? ' is-limit-reached' : ''}`}
-        title={isBlocked ? 'Daily download limit reached' : 'Downloads remaining today'}
-      >
-        Limit: <strong>
-          {isBlocked ? `${limit} / ${limit}` : `${limit - remaining} / ${limit}`}
-        </strong>
-      </div>
-
       <div className={`theme-selector${themeDropdownOpen ? ' open' : ''}`} ref={themeDropdownRef}>
         <button
           className="theme-selector-btn"
@@ -170,8 +153,6 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Pro Version Button with Crown Icon — opens the
-          pricing popup instead of leaving the page */}
       <button
         className="pro-btn"
         aria-haspopup="dialog"
@@ -209,7 +190,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile Menu Drawer */}
       <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`} aria-hidden={!mobileMenuOpen}>
         <div className="overlay" onClick={closeMobileMenu} aria-hidden="true" />
 
@@ -235,8 +215,6 @@ export default function Navbar() {
         </aside>
       </div>
 
-      {/* Pricing popup: the Get Pro button opens the full
-          pricing table in a modal instead of navigating away. */}
       <PricingModal open={pricingOpen} onClose={closePricing} />
     </>
   );

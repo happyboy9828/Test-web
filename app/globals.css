@@ -255,6 +255,90 @@ body {
 }
 .tool-footer-sep { opacity: 0.5; }
 
+/* Accordion / collapsible columns — on narrow screens each section
+   can be expanded or collapsed like a native accordion. On desktop
+   the same markup renders as a plain column. */
+.tool-footer-accordion {
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  background: var(--tool-surface);
+  overflow: hidden;
+}
+.tool-footer-accordion-head {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--tool-text);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.tool-footer-accordion-head::-webkit-details-marker {
+  display: none;
+}
+.tool-footer-accordion-head .tool-footer-heading {
+  margin: 0;
+}
+.tool-footer-chevron {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--tool-muted);
+  transition: transform 0.2s ease;
+}
+.tool-footer-accordion[open] .tool-footer-chevron {
+  transform: rotate(180deg);
+}
+.tool-footer-accordion > .tool-footer-list {
+  padding: 0 16px 14px;
+  gap: 8px;
+}
+.tool-footer-accordion > .tool-footer-list .tool-footer-link,
+.tool-footer-accordion > .tool-footer-list .tool-footer-category-name {
+  font-size: 14px;
+  color: var(--tool-muted);
+}
+
+/* Desktop: render the accordion as a plain column. */
+@media (min-width: 641px) {
+  .tool-footer-accordion {
+    border: none;
+    background: transparent;
+    padding: 0;
+    overflow: visible;
+  }
+  .tool-footer-accordion-head {
+    padding: 0;
+    cursor: default;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .tool-footer-accordion-head .tool-footer-heading {
+    margin: 0 0 12px;
+    font-size: 12px;
+  }
+  .tool-footer-chevron {
+    display: none;
+  }
+  .tool-footer-accordion > .tool-footer-list {
+    padding: 0;
+    gap: 10px;
+  }
+  .tool-footer-accordion > .tool-footer-list .tool-footer-link,
+  .tool-footer-accordion > .tool-footer-list .tool-footer-category-name {
+    font-size: 13px;
+    color: var(--tool-muted);
+  }
+  .tool-footer-accordion > .tool-footer-list .tool-footer-category-name {
+    color: var(--tool-text);
+    font-weight: 600;
+  }
+}
+
 @media (max-width: 900px) {
   .tool-footer-inner { grid-template-columns: 1fr 1fr; }
   .tool-footer-brand { grid-column: 1 / -1; }

@@ -30,7 +30,7 @@ npm run lint     # eslint
 ## Adding a tool
 
 1. Create `app/<ToolName>/page.js`. The route folder **must** use the same casing
-   as `utils/Image/<ToolName>/` — on a case-sensitive filesystem a mismatch
+   as the tool folder — on a case-sensitive filesystem a mismatch
    breaks the build.
 2. Add the tool's title and description to `PAGE_META` in `lib/pages.js`. Routes
    are discovered from the filesystem, so the nav and home page pick it up
@@ -41,11 +41,10 @@ npm run lint     # eslint
 ## Layout
 
 ```
-app/            routes; each tool folder holds page.js + layout.js
-components/     Navbar and PageCard (the only shared React components)
+app/            Next.js App Router routes + each tool's implementation
+components/     shared React components (Navbar, Footer, pricing, etc.)
 lib/pages.js    route discovery + the single source of truth for titles
 utils/shared/   helpers used by every tool (see below)
-utils/Image/    one folder per tool: <Tool>.js logic + <Tool>.css styles
 ```
 
 ### Shared helpers
